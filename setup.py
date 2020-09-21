@@ -20,7 +20,7 @@ setup(
     version=version,
     description="The tool to retrieve images for Erastothenes project.",
     long_description=readme + '\n\n',
-    author="Ou Ku",
+    author="Netherlands eScience Center",
     author_email='o.ku@esciencecenter.nl',
     url='https://github.com/GO-Eratosthenes/image_retrieval',
     packages=[
@@ -41,7 +41,10 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     test_suite='tests',
-    install_requires=[],  # FIXME: add your package's dependencies to this list
+    install_requires=[
+        'numpy',
+        'sat-search'
+    ],  # package's dependencies
     setup_requires=[
         # dependency for `python setup.py test`
         'pytest-runner',
