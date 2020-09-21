@@ -42,7 +42,6 @@ setup(
     ],
     test_suite='tests',
     install_requires=[
-        'numpy',
         'sat-search'
     ],  # package's dependencies
     setup_requires=[
