@@ -44,7 +44,7 @@ class ImageDowloader(object):
                 hash_search = hash_search.hexdigest()[:7]
                 search.items().save(self.cachepath / 'search_{}.json'.format(hash_search))
 
-    def download(self, assets='all'):
+    def download(self):
         for key, item in self.items.items():
             if key == 'sentinel-s2-l1c': # Download S2 level 1C from Google Cloud storage
                 BASE_URL = 'http://storage.googleapis.com/gcp-public-data-sentinel-2/tiles'
