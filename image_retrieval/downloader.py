@@ -44,31 +44,23 @@ class ImageDowloader(object):
                 hash_search = hash_search.hexdigest()[:7]
                 search.items().save(self.cachepath / 'search_{}.json'.format(hash_search))
 
+    def download(self, assets='all'):
+        for key, item in self.items.items():
+            if key == 'sentinel-s2-l1c': # Download S2 level 1C from Google Cloud storage
+                BASE_URL = 'http://storage.googleapis.com/gcp-public-data-sentinel-2/tiles'
+                scene_list = []
+                for item in item._items:
+                    scene_list.append('{}/{}/{}/{}/{}.SAFE'.format(
+                        BASE_URL, 
+                        item.properties['sentinel:utm_zone'],
+                        item.properties['sentinel:latitude_band'],
+                        item.properties['sentinel:grid_square'], 
+                        item.properties['sentinel:product_id']))
+                for s in scene_list:
+                    _download_sentinel(s, self.downloadpath)
+            else: 
+                item.download_assets(filename_template= self.downloadpath.as_posix()+'/${sentinel:product_id}/')
 
-    def download_aws(self, assets='all'):
-        if assets == 'all':
-            self.items.download_assets(
-                filename_template='test_download/${date}/${id}')
-        elif isinstance(assets, list):
-            for asset in assets:
-                filenames = self.items.download(
-                    asset, filename_template='test_download/${date}/${id}')
-        else:
-            filenames = self.items.download(
-                assets, filename_template='test_download/${date}/${id}')
-
-    def download_gcs(self, assets='all', key_json=None, project_id=None):
-        BASE_URL = 'http://storage.googleapis.com/gcp-public-data-sentinel-2/tiles'
-        scene_list = []
-        for item in self.items._items:
-            scene_list.append('{}/{}/{}/{}/{}.SAFE'.format(
-                BASE_URL, 
-                item.properties['sentinel:utm_zone'],
-                item.properties['sentinel:latitude_band'],
-                item.properties['sentinel:grid_square'], 
-                item.properties['sentinel:product_id']))
-        for s in scene_list:
-            _download_sentinel(s, self.outpath)
 
 def _download_file(url, dst_name):
     try:
@@ -77,7 +69,7 @@ def _download_file(url, dst_name):
             for chunk in data.iter_content(chunk_size=100 * 100):
                 out_file.write(chunk)
     except:
-        # print '\t ... {f} FAILED!'.format(f=url.split('/')[-1])
+        print('{} FAILED!'.format(url.split('/')[-1]))
         return
 
 def _make_safe_dirs(scene, outpath):
