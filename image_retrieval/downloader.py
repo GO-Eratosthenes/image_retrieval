@@ -3,8 +3,6 @@ import satsearch
 import os
 import requests
 from pathlib import Path
-from google.cloud import bigquery
-from google.oauth2 import service_account
 
 
 class ImageDowloader(object):
