@@ -57,8 +57,5 @@ setup(
         'pytest-cov',
         'pycodestyle',
     ],
-    extras_require={
-        'dev':  ['prospector[with_pyroma]', 'yapf', 'isort'],
-    },
     data_files=[('citation/image_retrieval', ['CITATION.cff'])]
 )
